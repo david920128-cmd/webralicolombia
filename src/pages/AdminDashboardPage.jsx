@@ -8,15 +8,25 @@ function SettingsForm({ settings, onSave, onUpload, message }) {
   async function handleLogo(event) {
     const file = event.target.files?.[0]
     if (!file) return
-    const result = await onUpload(file)
-    if (result.ok) setForm((prev) => ({ ...prev, logo_url: result.url }))
+    const result = await onUpload(file, 'logo')
+    if (!result.ok) {
+      alert(result.message || 'No se pudo subir el logo.')
+      console.error('ERROR SUBIENDO LOGO:', result)
+      return
+    }
+    setForm((prev) => ({ ...prev, logo_url: result.url }))
   }
 
   async function handleHero(event) {
     const file = event.target.files?.[0]
     if (!file) return
-    const result = await onUpload(file)
-    if (result.ok) setForm((prev) => ({ ...prev, hero_image_url: result.url }))
+    const result = await onUpload(file, 'productos')
+    if (!result.ok) {
+      alert(result.message || 'No se pudo subir la imagen principal.')
+      console.error('ERROR SUBIENDO IMAGEN PRINCIPAL:', result)
+      return
+    }
+    setForm((prev) => ({ ...prev, hero_image_url: result.url }))
   }
 
   async function submit(event) {
@@ -98,12 +108,22 @@ function ProductEditor({ product, onChange, onUploadImage, onSave, onDelete }) {
   async function handleFiles(event) {
     const files = Array.from(event.target.files || [])
     for (const file of files) {
-      const result = await onUploadImage(file)
+      const result = await onUploadImage(file, 'productos')
       if (result.ok) {
         onChange({
           ...product,
-          images: [...(product.images || []), { id: `${Date.now()}-${file.name}`, image_url: result.url, sort_order: (product.images?.length || 0) + 1 }],
+          images: [
+            ...(product.images || []),
+            {
+              id: `${Date.now()}-${file.name}`,
+              image_url: result.url,
+              sort_order: (product.images?.length || 0) + 1,
+            },
+          ],
         })
+      } else {
+        alert(result.message || 'No se pudo subir la imagen.')
+        console.error('ERROR SUBIENDO IMAGEN:', result)
       }
     }
   }

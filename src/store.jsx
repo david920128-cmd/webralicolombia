@@ -21,6 +21,15 @@ function saveLocal(key, value) {
   localStorage.setItem(key, JSON.stringify(value))
 }
 
+function safeFileName(name = 'archivo') {
+  return name
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-zA-Z0-9._-]/g, '')
+    .toLowerCase()
+}
+
 export function AppProvider({ children }) {
   const [settings, setSettings] = useState(defaultSettings)
   const [products, setProducts] = useState(defaultProducts)
@@ -51,12 +60,12 @@ export function AppProvider({ children }) {
       .select('*, product_images(*)')
       .order('sort_order', { ascending: true })
 
-    const normalized = (productsData || defaultProducts).map((item) => ({
+    const normalized = (productsData || []).map((item) => ({
       ...item,
-      images: (item.product_images || item.images || []).sort((a, b) => a.sort_order - b.sort_order),
+      images: (item.product_images || item.images || []).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0)),
     }))
 
-    setProducts(normalized)
+    setProducts(normalized.length ? normalized : defaultProducts)
     setLoading(false)
   }, [])
 
@@ -172,7 +181,8 @@ export function AppProvider({ children }) {
       const { data, error } = await supabase.from('products').update(payload).eq('id', normalized.id).select().single()
       if (error) return { ok: false, message: error.message }
       savedProduct = data
-      await supabase.from('product_images').delete().eq('product_id', normalized.id)
+      const { error: deleteImagesError } = await supabase.from('product_images').delete().eq('product_id', normalized.id)
+      if (deleteImagesError) return { ok: false, message: deleteImagesError.message }
     }
 
     if (normalized.images.length) {
@@ -200,7 +210,7 @@ export function AppProvider({ children }) {
     return { ok: true }
   }
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (file, bucket = 'productos') => {
     if (!hasSupabase) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
@@ -210,10 +220,11 @@ export function AppProvider({ children }) {
       })
     }
 
-    const filename = `${Date.now()}-${file.name}`
-    const { error } = await supabase.storage.from('rali-assets').upload(filename, file, { upsert: true })
+    const safeName = safeFileName(file.name)
+    const filename = `${Date.now()}-${safeName}`
+    const { error } = await supabase.storage.from(bucket).upload(filename, file, { upsert: true })
     if (error) return { ok: false, message: error.message }
-    const { data } = supabase.storage.from('rali-assets').getPublicUrl(filename)
+    const { data } = supabase.storage.from(bucket).getPublicUrl(filename)
     return { ok: true, url: data.publicUrl }
   }
 
