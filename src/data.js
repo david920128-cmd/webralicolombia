@@ -1,0 +1,70 @@
+export const defaultSettings = {
+  business_name: 'RALI',
+  subtitle: 'Calidad y servicio',
+  welcome_title: 'Porta Menús, Carpetas de Grado y Trabajos Personalizados',
+  welcome_description:
+    'Diseños modernos, acabados elegantes y atención rápida para negocios, instituciones y eventos especiales.',
+  about_text:
+    'En RALI trabajamos con compromiso, calidad y servicio para ofrecer productos personalizados que proyecten una imagen profesional y llamativa.',
+  mission: 'Ofrecer productos personalizados con excelente calidad, diseño y atención al cliente.',
+  vision: 'Ser una empresa reconocida por su calidad, cumplimiento e innovación.',
+  values_text: 'Calidad, servicio, responsabilidad, cumplimiento e innovación.',
+  whatsapp: '3144746025',
+  phone_1: '3144746025',
+  phone_2: '3156104690',
+  address: 'Calle 11 No. 27-68 Local 103',
+  neighborhood: 'Barrio Ricaurte',
+  city: 'Bogotá, Colombia',
+  website: 'www.ralicolombia.com',
+  email: 'contacto@ralicolombia.com',
+  logo_url: '/logo-rali.png',
+  hero_image_url: '/products/porta-menu-1.jpeg',
+}
+
+export const defaultProducts = [
+  {
+    id: 'local-1',
+    name: 'Porta Menús Premium',
+    description: 'Presentación elegante y resistente para restaurantes, cafés y negocios gastronómicos.',
+    price: 'Cotiza por WhatsApp',
+    category: 'Porta menús',
+    sort_order: 1,
+    active: true,
+    images: [
+      { id: 'local-1-1', image_url: '/products/porta-menu-1.jpeg', sort_order: 1 },
+      { id: 'local-1-2', image_url: '/products/porta-menu-2.jpeg', sort_order: 2 },
+      { id: 'local-1-3', image_url: '/products/porta-menu-3.jpeg', sort_order: 3 },
+      { id: 'local-1-4', image_url: '/products/porta-menu-4.jpeg', sort_order: 4 },
+    ],
+  },
+  {
+    id: 'local-2',
+    name: 'Carpetas de Grado',
+    description: 'Acabados profesionales para instituciones, ceremonias y reconocimientos especiales.',
+    price: 'Cotiza por WhatsApp',
+    category: 'Carpetas',
+    sort_order: 2,
+    active: true,
+    images: [
+      { id: 'local-2-1', image_url: '/products/carpeta-grado-1.jpeg', sort_order: 1 },
+      { id: 'local-2-2', image_url: '/products/carpeta-grado-2.jpeg', sort_order: 2 },
+      { id: 'local-2-3', image_url: '/products/carpeta-grado-3.jpeg', sort_order: 3 },
+      { id: 'local-2-4', image_url: '/products/carpeta-grado-4.jpeg', sort_order: 4 },
+    ],
+  },
+  {
+    id: 'local-3',
+    name: 'Trabajos Especiales',
+    description: 'Soluciones personalizadas con acabados visuales llamativos y adaptación a la necesidad del cliente.',
+    price: 'Cotiza por WhatsApp',
+    category: 'Personalizados',
+    sort_order: 3,
+    active: true,
+    images: [
+      { id: 'local-3-1', image_url: '/products/trabajo-especial-1.jpeg', sort_order: 1 },
+      { id: 'local-3-2', image_url: '/products/trabajo-especial-2.jpeg', sort_order: 2 },
+      { id: 'local-3-3', image_url: '/products/trabajo-especial-3.jpeg', sort_order: 3 },
+      { id: 'local-3-4', image_url: '/products/trabajo-especial-4.jpeg', sort_order: 4 },
+    ],
+  },
+]
